@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link href="styles.css" rel="stylesheet">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+<body>
+	
+	<div id="up">
+		<h2>Загрузить файл</h2><br>
+		<form enctype="multipart/form-data" id="uploadForm" >
+			<h4>Имя<span id="req">*</span>: <input type="text" name="fname" id='fname' required>
+			Фамилия<span id="req">*</span>:<input type="text" name="lname" id='lname' required>
+			E-mail<span id="req">*</span>:<input type="text" name="email" id='email'required><br>
+			
+			<input type="file" name="file" id='file' required><br>
+			<label for="file">Прикрепить файл<span id="req">*</span>:<i class="fa fa-upload" aria-hidden="true"></i></label>
+			<span id="nameOfFile"></span></h4>
+			<input type="submit" value='SEND_YOUR_DATA' name="submit" id="btnSubmit">
+		</form>
+	</div>
+	<br><br>
+	
+	<div id="check">
+		<h2>Посмотреть загруженные файлы</h2><br>
+		<form id="checkUploads" >
+			<h4>Имя<span id="req">*</span>:<input type="text" name="fname" id='fnameCheck' required>
+			Фамилия<span id="req">*</span>:<input type="text" name="lname" id='lnameCheck' required>
+			E-mail<span id="req">*</span>:<input type="text" name="email" id='emailCheck' required><br></h4>
+			<input type="submit" value='CHECK_UPLOADS' name="submit" id="btnSubmit" class="clickMe">
+		</form>
+	</div>
+	<div id="upFiles">
+		
+	</div>
+
+<script src="https://use.fontawesome.com/cc4f8b19af.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+
+		$(document).ready(function () {
+
+			document.getElementById('upFiles').addEventListener('DOMSubtreeModified', function(){
+				document.querySelectorAll('span1').forEach((item) => {
+  					item.addEventListener('click', function(event){
+						if (window.confirm('вы действительно хотите удалить файл '+ $(this).attr('name'))){
+    						let ref = $(this).attr('href');
+							$.ajax({
+								url:ref,
+								type:'GET',
+								success:function(data){
+									if (data == '11'){
+										alert('Файл успешно удален');
+									}else if (data == '00'){
+										alert('произошла непредвиденная ошибка')
+									}else if (data[0] == '0'){
+										alert('файл удален, но не данные о нем')
+									}else if (data[1] == '0'){
+										alert('данные о файле удалены, но не сам файл')
+									}
+									$('.clickMe').trigger('click');
+								}
+							});
+						};
+  					});
+				});
+			})
+			
+			document.getElementById('file').addEventListener('input', function(){
+				let tmp = document.getElementById('file').value.split("\\"); 
+				document.getElementById('nameOfFile').innerHTML = tmp[tmp.length-1];
+			})
+	
+			$('#uploadForm').submit(function(event){
+				event.preventDefault();
+				$.ajax({
+					url:'userData.php',
+					type:'POST',
+					data: new FormData(this),
+					contentType: false,
+					cache: false,
+					processData:false,
+					success: function (r) {
+					
+					if (r==''){
+						alert('файл успешно загружен');
+					}else{
+						alert('произошла  непредвиденная ошибка');
+					};
+					
+					document.getElementById("fname").value = '';
+					document.getElementById("lname").value = '';
+					document.getElementById("email").value = '';
+					document.getElementById("nameOfFile").innerHTML = '';
+				}
+			});		
+		})
+		
+		$('#checkUploads').submit(function(event){
+			event.preventDefault();
+			$.ajax({
+				url:'checkUserData.php',
+				type:'POST',
+				data: new FormData(this),
+				contentType:false,
+				cache: false,
+   				processData:false,
+				success: function(r){
+					document.getElementById('upFiles').innerHTML = '';
+					var fn = JSON.parse(r);
+					for (let i = 0; i < fn['file'].length; i++){
+						document.getElementById('upFiles').innerHTML += '<a href="/uploads/'+fn['filename'][i]+'" download = '+fn['file'][i]+'>'+fn['file'][i] +'</a>'
+							+'<span1 id="trash" class="rm'+i+'" name="' +fn['file'][i] +'" href="removeFile.php?rm='+ fn['filename'][i] +'">   <i class="fa fa-trash" aria-hidden="true"></i></span1><br>';
+					}
+				}
+			});
+		});
+	});
+
+</script>
+
+</body>
+</html>

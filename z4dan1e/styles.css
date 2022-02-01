@@ -1,0 +1,91 @@
+*{
+    box-sizing: border-box;
+}
+
+body{  display: grid;
+    grid-template-columns: 0.7fr 1.6fr 0.7fr;
+    grid-template-rows: 0.1fr 1fr 0.1fr 1fr 0.1fr 0.5fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      ". . ."
+      ". firstText ."
+      ". . ."
+      ". secondText ."
+      ". . ."
+      ". downloadable .";
+
+    background-color: #F7F7FF;
+  }
+  
+#up { grid-area: firstText; white-space: nowrap;}
+  
+#check { grid-area: secondText; }
+  
+#upFiles { grid-area: downloadable; }
+  
+  h4, input{
+    white-space: nowrap;
+    line-height: 0px;
+    color: #0D0A0B;
+
+}
+
+h2{
+    text-align: center;
+    color: #0D0A0B;
+}
+
+input{
+    margin-left: 10px;
+}
+
+#file{
+    visibility: hidden;
+}
+
+#file, #moveDown{
+    position: relative;
+    top:20px;
+}
+
+#btnSubmit{
+    margin:0 auto;
+    display:block;
+    text-align:center; 
+    background-color: #F2D0A4;
+    padding: 10px 50px;
+    border-radius: 15px;
+    
+}
+
+#upFiles{
+    inline-size: 800px;
+    overflow:scroll ;
+}
+
+#req{
+    color:#C03221;
+}
+
+a{
+    height: 50px;
+    width: 100px;
+}
+
+#upFiles{
+    height: 100px;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+br {
+    display: block;
+    content: "";
+    margin: 15px 0;
+
+    line-height:22px;
+ }
+#trash{
+    content: "\f1f8";
+}
