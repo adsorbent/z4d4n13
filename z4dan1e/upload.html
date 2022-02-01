@@ -32,7 +32,7 @@
 			<input type="submit" value='CHECK_UPLOADS' name="submit" id="btnSubmit" class="clickMe">
 		</form>
 	</div>
-	<div id="upFiles">
+	<div id="upFiles" style='visibility: hidden;'>
 		
 	</div>
 
@@ -109,6 +109,7 @@
    				processData:false,
 				success: function(r){
 					document.getElementById('upFiles').innerHTML = '';
+					document.getElementById('upFiles').style.visibility = 'visible';
 					var fn = JSON.parse(r);
 					for (let i = 0; i < fn['file'].length; i++){
 						document.getElementById('upFiles').innerHTML += '<a href="/uploads/'+fn['filename'][i]+'" download = '+fn['file'][i]+'>'+fn['file'][i] +'</a>'
